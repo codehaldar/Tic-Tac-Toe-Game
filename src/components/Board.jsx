@@ -3,16 +3,22 @@ import Square from './Square';
 
 const Board = () => {
   const [squares, setsquares] = useState(Array(9).fill(null));
+  const [xturn, toggleturn] = useState(true);
+  //const [success, back] = useState(false);
   const eventHandler = pos => {
+    if (squares[pos]) {
+      return;
+    }
     setsquares(currsq => {
       const newsq = currsq.map((val, i) => {
-        if (pos === i) {
-          return 'X';
+        if (pos === i && val === null) {
+          return xturn ? 'X' : 'O';
         }
         return val;
       });
       return newsq;
     });
+    toggleturn(curr => !curr);
   };
   const render = pos => {
     return <Square val={squares[pos]} onClick={() => eventHandler(pos)} />;
