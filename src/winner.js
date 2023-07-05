@@ -9,11 +9,11 @@ export const calcwinner = squares => {
     [2, 5, 8],
 
     [0, 4, 8],
-    [6, 4, 2],
+    [2, 4, 6],
   ];
   for (let i = 0; i < combos.length; i++) {
     const [a, b, c] = combos[i];
-    if (squares[i] && squares[a] === squares[b] && squares[b] === squares[c]) {
+    if (squares[a] && squares[a] === squares[b] && squares[b] === squares[c]) {
       return squares[a];
     }
   }
