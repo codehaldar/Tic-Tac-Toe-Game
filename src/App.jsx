@@ -4,11 +4,11 @@ import Board from './components/Board';
 import { calcwinner } from './winner';
 import Statusmess from './components/Statusmess';
 import History from './components/History';
+import Restart from './components/Restart';
 const NEW_GAME = [{ squares: Array(9).fill(null), xturn: true }];
 function App() {
   const [history, sethistory] = useState(NEW_GAME);
   const [currmove, setcurrmove] = useState(0);
-  console.log({ history, currmove });
   const gamingBoard = history[currmove];
   const wonby = calcwinner(gamingBoard.squares);
 
@@ -41,10 +41,15 @@ function App() {
   const moveTo = move => {
     setcurrmove(move);
   };
+  const reset = () => {
+    sethistory(NEW_GAME);
+    setcurrmove(0);
+  };
   return (
     <div className="app">
       <Statusmess wonby={wonby} gamingBoard={gamingBoard} />
       <Board squares={gamingBoard.squares} eventHandler={eventHandler} />
+      <Restart reset={reset} wonby={wonby} />
       <h3>Current Game History</h3>
       <History history={history} moveTo={moveTo} currmove={currmove} />
     </div>
