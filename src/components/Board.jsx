@@ -1,11 +1,18 @@
 import { useState } from 'react';
 import Square from './Square';
 
-const Board = ({ squares, eventHandler }) => {
+const Board = ({ squares, eventHandler, winsq }) => {
   //const [success, back] = useState(false);
 
   const render = pos => {
-    return <Square val={squares[pos]} onClick={() => eventHandler(pos)} />;
+    const iswinsq = winsq.includes(pos);
+    return (
+      <Square
+        val={squares[pos]}
+        onClick={() => eventHandler(pos)}
+        iswinsq={iswinsq}
+      />
+    );
   };
   return (
     <div className="board">

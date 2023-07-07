@@ -10,7 +10,7 @@ function App() {
   const [history, sethistory] = useState(NEW_GAME);
   const [currmove, setcurrmove] = useState(0);
   const gamingBoard = history[currmove];
-  const wonby = calcwinner(gamingBoard.squares);
+  const { wonby, winsq } = calcwinner(gamingBoard.squares);
 
   const eventHandler = pos => {
     if (gamingBoard.squares[pos] || wonby) {
@@ -47,10 +47,23 @@ function App() {
   };
   return (
     <div className="app">
+      <h1>
+        TIC <span className="text-green">TAC</span> TOE
+      </h1>
       <Statusmess wonby={wonby} gamingBoard={gamingBoard} />
-      <Board squares={gamingBoard.squares} eventHandler={eventHandler} />
+      <Board
+        squares={gamingBoard.squares}
+        eventHandler={eventHandler}
+        winsq={winsq}
+      />
       <Restart reset={reset} wonby={wonby} />
-      <h3>Current Game History</h3>
+      <h3
+        style={{
+          fontWeight: 'normal',
+        }}
+      >
+        Current Game History
+      </h3>
       <History history={history} moveTo={moveTo} currmove={currmove} />
     </div>
   );

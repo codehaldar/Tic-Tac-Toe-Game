@@ -14,8 +14,14 @@ export const calcwinner = squares => {
   for (let i = 0; i < combos.length; i++) {
     const [a, b, c] = combos[i];
     if (squares[a] && squares[a] === squares[b] && squares[b] === squares[c]) {
-      return squares[a];
+      return {
+        wonby: squares[a],
+        winsq: combos[i],
+      };
     }
   }
-  return null;
+  return {
+    wonby: null,
+    winsq: [],
+  };
 };
