@@ -1,4 +1,5 @@
-const Statusmess = ({ wonby, xturn, squares }) => {
+const Statusmess = ({ wonby, gamingBoard }) => {
+  const { squares, xturn } = gamingBoard;
   const nomovesleft = squares.every(val => val !== null);
   const nextplayer = xturn ? (
     <span className="text-green">X</span>

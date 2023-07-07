@@ -3,31 +3,51 @@ import { useState } from 'react';
 import Board from './components/Board';
 import { calcwinner } from './winner';
 import Statusmess from './components/Statusmess';
+import History from './components/History';
 function App() {
-  const [squares, setsquares] = useState(Array(9).fill(null));
-  const [xturn, toggleturn] = useState(true);
-  const wonby = calcwinner(squares);
-
-  //const status = wonby ? `Winner is ${wonby}` : `Next player is ${nextplayer}`;
+  const [history, sethistory] = useState([
+    { squares: Array(9).fill(null), xturn: true },
+  ]);
+  const [currmove, setcurrmove] = useState(0);
+  console.log({ history, currmove });
+  const gamingBoard = history[currmove];
+  const wonby = calcwinner(gamingBoard.squares);
 
   const eventHandler = pos => {
-    if (squares[pos] || wonby) {
+    if (gamingBoard.squares[pos] || wonby) {
       return;
     }
-    setsquares(currsq => {
-      return currsq.map((val, i) => {
+    sethistory(currhistory => {
+      const isTraversing = currmove + 1 !== currhistory.length;
+
+      const lastGamingstate = isTraversing
+        ? history[currmove]
+        : history[history.length - 1];
+      const nextSquarState = lastGamingstate.squares.map((val, i) => {
         if (pos === i && val === null) {
-          return xturn ? 'X' : 'O';
+          return lastGamingstate.xturn ? 'X' : 'O';
         }
         return val;
       });
+      const base = isTraversing
+        ? currhistory.slice(0, currhistory.indexOf(lastGamingstate) + 1)
+        : currhistory;
+      return base.concat({
+        squares: nextSquarState,
+        xturn: !lastGamingstate.xturn,
+      });
     });
-    toggleturn(curr => !curr);
+    setcurrmove(move => move + 1);
+  };
+  const moveTo = move => {
+    setcurrmove(move);
   };
   return (
     <div className="app">
-      <Statusmess wonby={wonby} xturn={xturn} squares={squares} />
-      <Board squares={squares} eventHandler={eventHandler} />
+      <Statusmess wonby={wonby} gamingBoard={gamingBoard} />
+      <Board squares={gamingBoard.squares} eventHandler={eventHandler} />
+      <h3>Current Game History</h3>
+      <History history={history} moveTo={moveTo} currmove={currmove} />
     </div>
   );
 }
